@@ -4,7 +4,7 @@ const app = express();
 
 const bodyParser = require("body-parser");
 const productRoutes = require("./api/routes/products");
- const mongose = require("mongoose");
+const mongose = require("mongoose");
 const orderRoutes = require("./api/routes/orders");
 mongose.connect(
   "mongodb+srv://Node-Rest-API:we1CyOZp9OGX1kYV@cluster0.i2tf4.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
