@@ -4,9 +4,22 @@ const router = express.Router();
 const Product = require("../models/product");
 
 router.get("/", (req, res, next) => {
-  res.status(200).json({
-    message: "Handling POST request to /products"
-  });
+  // res.status(200).json({
+  //   message: "Handling POST request to /products"
+  // });
+  Product.find()
+    .exec()
+    .then(doc => {
+      console.log(doc);
+      res.status(200).json(doc);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+        message: "Error occurs"
+      });
+    });
 });
 router.post("/", (req, res, next) => {
   const product = new Product({
@@ -22,28 +35,30 @@ router.post("/", (req, res, next) => {
   });
   product
     .save()
-    .then(res => {
-      console.log(res);
+    .then(doc => {
+      console.log(doc);
+      res.status(201).json({
+        message: "Handling GET request to /products",
+        product: product
+      });
     })
     .catch(err => {
       console.log(err);
     });
-  res.status(201).json({
-    message: "Handling GET request to /products",
-    product: product
-  });
 });
 router.get("/:productId", (req, res, next) => {
   const id = req.params.productId;
+  console.log("id ", id);
   Product.findById(id)
     .exec()
     .then(doc => {
-      console.log(doc);
-      if (doc) {
-        res.status(404).json({ message: "No valid Entry found" });
-      } else {
-        res.status(200).json(doc);
-      }
+      console.log("123456", doc);
+      res.status(200).json(doc);
+      // if (doc) {
+      //   res.status(404).json({ message: "No valid Entry found" });
+      // } else {
+      //   res.status(200).json(doc);
+      // }
     })
     .catch(err => {
       console.log(err);
@@ -62,19 +77,31 @@ router.get("/:productId", (req, res, next) => {
 });
 router.patch("/:productId", (req, res, next) => {
   const id = req.params.productId;
-  const updateProduct = {};
-  for (const x of req.body) {
-    updateProduct[x.propName] = x.value;
-  }
+  const updateProduct = {
+    _id: id,
+    color: req.body.color,
+    stock: req.body.stock,
+    title: req.body.title,
+    price: req.body.price,
+    description: req.body.description,
+    category: req.body.category,
+    bsingle: req.body.bsingle,
+    image_url: req.body.image
+  };
+  // for (const ops of req.body) {
+  //   console.log("ops ", ops.propName);
+  //   updateProduct[ops.propName] = ops.value;
+  // }
+  console.log("updateProduct ", updateProduct);
   Product.update({ _id: id }, { $set: updateProduct })
     .exec()
     .then(resp => {
       console.log(resp);
-      res.status(201).json(resp);
+      res.status(200).json(resp);
     })
     .catch(err => {
       console.log(err);
-      res.status(400).json({ error: err });
+      res.status(500).json({ error: err });
     });
 });
 router.delete("/:productId", (req, res, next) => {

@@ -1,15 +1,16 @@
 const express = require("express");
 const morgan = require("morgan");
 const app = express();
-
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const productRoutes = require("./api/routes/products");
 const mongose = require("mongoose");
 const orderRoutes = require("./api/routes/orders");
 mongose.connect(
-  "mongodb+srv://Node-Rest-API:we1CyOZp9OGX1kYV@cluster0.i2tf4.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+  "mongodb+srv://Node-Rest-API:we1CyOZp9OGX1kYV@cluster0.i2tf4.mongodb.net/myFirstDatabase?retryWrites=true&w=majority" 
 );
 
+app.use(cors());
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

@@ -11,4 +11,4 @@ const productSchema = mongose.Schema({
   image_url: Array
 });
 
-module.exports = mongose.model("product", productSchema);
+module.exports = mongose.model("products", productSchema);
