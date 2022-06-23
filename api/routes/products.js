@@ -4,9 +4,6 @@ const router = express.Router();
 const Product = require("../models/product");
 
 router.get("/", (req, res, next) => {
-  // res.status(200).json({
-  //   message: "Handling POST request to /products"
-  // });
   Product.find()
     .exec()
     .then(doc => {
@@ -21,6 +18,7 @@ router.get("/", (req, res, next) => {
       });
     });
 });
+
 router.post("/", (req, res, next) => {
   const product = new Product({
     _id: new mongose.Types.ObjectId(),
@@ -46,9 +44,9 @@ router.post("/", (req, res, next) => {
       console.log(err);
     });
 });
+
 router.get("/:productId", (req, res, next) => {
   const id = req.params.productId;
-  console.log("id ", id);
   Product.findById(id)
     .exec()
     .then(doc => {
@@ -92,7 +90,6 @@ router.patch("/:productId", (req, res, next) => {
   //   console.log("ops ", ops.propName);
   //   updateProduct[ops.propName] = ops.value;
   // }
-  console.log("updateProduct ", updateProduct);
   Product.update({ _id: id }, { $set: updateProduct })
     .exec()
     .then(resp => {

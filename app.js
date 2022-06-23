@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const morgan = require("morgan");
 const app = express();
@@ -6,9 +7,9 @@ const bodyParser = require("body-parser");
 const productRoutes = require("./api/routes/products");
 const mongose = require("mongoose");
 const orderRoutes = require("./api/routes/orders");
-mongose.connect(
-  "mongodb+srv://Node-Rest-API:we1CyOZp9OGX1kYV@cluster0.i2tf4.mongodb.net/myFirstDatabase?retryWrites=true&w=majority" 
-);
+const user=require('./api/routes/users')
+
+mongose.connect(process.env.URL);
 
 app.use(cors());
 app.use(morgan("dev"));
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
 
 app.use("/products", productRoutes);
 app.use("/orders", orderRoutes);
+app.use('/user',user)
 
 //Error handling
 
@@ -51,9 +53,6 @@ app.use((error, req, res, next) => {
       message: error.message
     }
   });
-  //   if (req.status == 404 || req.status == 500) {
-  //     swal({ title: "Error", icon: "warning", text: `${error.message}` });
-  //   }
 });
 
 module.exports = app;
